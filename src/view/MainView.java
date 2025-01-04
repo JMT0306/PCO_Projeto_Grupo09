@@ -94,6 +94,11 @@ public class MainView {
                     GestorFrotaView gestorFrotaView = new GestorFrotaView(velocipedeController);
                     gestorFrotaView.mostrarGestorFrotaMenu();
                 }
+                case "Cliente" -> {
+                    ClienteView clienteView = new ClienteView(velocipedeController);
+                    clienteView.mostrarClienteMenu();
+                }
+                default -> System.out.println("Erro: Permissão desconhecida.");
             }
         } else {
             System.out.println("Erro: Credenciais inválidas.");
@@ -101,7 +106,7 @@ public class MainView {
     }
 
     private void consultarVelocipedes() {
-        System.out.println("\n--- Consultar Velocipedes ---");
+        System.out.println("\n--- Consultar Velocípedes ---");
 
         List<Velocipede> velocipedes = velocipedeController.listarVelocipedes();
 
