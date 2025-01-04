@@ -1,20 +1,20 @@
-import controller.CampaignController;
-import controller.UserController;
-import controller.VehicleController;
+import controller.CampanhaPromocionalController;
+import controller.UtilizadorController;
+import controller.VelocipedeController;
 import view.MainView;
 
 public class Application {
     public static void main(String[] args) {
         // Inicializar os controladores
-        UserController userController = new UserController();
-        VehicleController vehicleController = new VehicleController();
-        CampaignController campaignController = new CampaignController();
+        UtilizadorController utilizadorController = new UtilizadorController();
+        VelocipedeController velocipedeController = new VelocipedeController();
+        CampanhaPromocionalController campanhaPromocionalController = new CampanhaPromocionalController();
 
         // Inicializar a visualização principal
-        MainView mainView = new MainView(userController, vehicleController, campaignController);
+        MainView mainView = new MainView(utilizadorController, velocipedeController, campanhaPromocionalController);
 
-        // Exibir o menu principal
-        mainView.displayMenu();
+        // Mostrar o menu principal
+        mainView.mostrarMenu();
 
         System.out.println("Sistema encerrado. Obrigado por utilizar!");
     }

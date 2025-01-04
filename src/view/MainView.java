@@ -1,189 +1,116 @@
 package view;
-
-import controller.CampaignController;
-import controller.UserController;
-import controller.VehicleController;
-import model.Campaign;
-import model.User;
-import model.Vehicle;
-
+import controller.CampanhaPromocionalController;
+import controller.UtilizadorController;
+import controller.VelocipedeController;
+import model.Utilizador;
+import model.Velocipede;
+import java.util.List;
 import java.util.Scanner;
 
 public class MainView {
-    private final UserController userController;
-    private final VehicleController vehicleController;
-    private final CampaignController campaignController;
+    private final UtilizadorController utilizadorController;
+    private final VelocipedeController velocipedeController;
+    private final CampanhaPromocionalController campanhaPromocionalController;
     private final Scanner scanner;
 
-    public MainView(UserController userController, VehicleController vehicleController, CampaignController campaignController) {
-        this.userController = userController;
-        this.vehicleController = vehicleController;
-        this.campaignController = campaignController;
+    public MainView(UtilizadorController utilizadorController, VelocipedeController velocipedeController,
+                    CampanhaPromocionalController campanhaPromocionalController) {
+        this.utilizadorController = utilizadorController;
+        this.velocipedeController = velocipedeController;
+        this.campanhaPromocionalController = campanhaPromocionalController;
         this.scanner = new Scanner(System.in);
     }
 
-    public void displayMenu() {
+    public void mostrarMenu() {
         int option;
         do {
             System.out.println("\n=== Sistema de Gestão de Velocípedes ===");
-            System.out.println("1. Gerir Utilizadores");
-            System.out.println("2. Gerir Veículos");
-            System.out.println("3. Gerir Campanhas");
+            System.out.println("1. Registar Utilizador");
+            System.out.println("2. Autenticar Utilizador");
+            System.out.println("3. Consultar Velocípedes");
             System.out.println("4. Sair");
             System.out.print("Escolha uma opção: ");
             option = scanner.nextInt();
-            scanner.nextLine(); // Limpar o buffer
+            scanner.nextLine(); // limpar o buffer
 
             switch (option) {
-                case 1 -> manageUsers();
-                case 2 -> manageVehicles();
-                case 3 -> manageCampaigns();
+                case 1 -> iniciarRegisto();
+                case 2 -> iniciarSessao();
+                case 3 -> consultarVelocipedes();
                 case 4 -> System.out.println("Saindo do sistema...");
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }
         } while (option != 4);
     }
 
-    private void manageUsers() {
-        System.out.println("\n--- Gerir Utilizadores ---");
-        System.out.println("1. Registar Utilizador");
-        System.out.println("2. Listar Utilizadores");
-        System.out.println("3. Atribuir Permissão");
-        System.out.println("4. Revogar Permissão");
-        System.out.print("Escolha uma opção: ");
-        int option = scanner.nextInt();
-        scanner.nextLine();
+    private void iniciarRegisto() {
+        System.out.println("\n--- Registar Utilizador ---");
 
-        switch (option) {
-            case 1 -> {
-                System.out.print("Nome: ");
-                String name = scanner.nextLine();
-                System.out.print("Email: ");
-                String email = scanner.nextLine();
-                System.out.print("Password: ");
-                String password = scanner.nextLine();
-                System.out.print("Permissão (Cliente, Gestor, Técnico, Comercial): ");
-                String role = scanner.nextLine();
+        System.out.print("Primeiro Nome: ");
+        String primeiroNome = scanner.nextLine();
+        System.out.print("Último Nome: ");
+        String ultimoNome = scanner.nextLine();
+        System.out.print("Email: ");
+        String email = scanner.nextLine();
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
+        String permissao = "GestorFrota";
 
-                User user = new User(String.valueOf(System.currentTimeMillis()), name, email, password, role);
-                userController.registerUser(user);
-            }
-            case 2 -> {
-                System.out.println("Lista de Utilizadores:");
-                for (User user : userController.listUsers()) {
-                    System.out.println(user.getName() + " - " + user.getRole());
-                }
-            }
-            case 3 -> {
-                System.out.print("Email do Utilizador: ");
-                String email = scanner.nextLine();
-                System.out.print("Nova Permissão: ");
-                String role = scanner.nextLine();
-                userController.assignRole(email, role);
-            }
-            case 4 -> {
-                System.out.print("Email do Utilizador: ");
-                String email = scanner.nextLine();
-                userController.revokeRole(email);
-            }
-            default -> System.out.println("Opção inválida.");
+        System.out.println("Um link de confirmação foi enviado para o seu email: " + email);
+
+        boolean sucesso = utilizadorController.registarUtilizador(primeiroNome, ultimoNome, email, password, permissao);
+
+        if (sucesso) {
+            System.out.println("Registado como utilizador com sucesso.");
+        } else {
+            System.out.println("Erro no registo. O email pode já estar registado ou o nome completo já existir.");
         }
     }
 
-    private void manageVehicles() {
-        System.out.println("\n--- Gerir Veículos ---");
-        System.out.println("1. Adicionar Veículo");
-        System.out.println("2. Listar Veículos");
-        System.out.println("3. Monitorizar Veículos");
-        System.out.println("4. Distribuir Veículo");
-        System.out.print("Escolha uma opção: ");
-        int option = scanner.nextInt();
-        scanner.nextLine();
+    private void iniciarSessao() {
+        System.out.println("\n--- Autenticar Utilizador ---");
 
-        switch (option) {
-            case 1 -> {
-                System.out.print("ID: ");
-                String id = scanner.nextLine();
-                System.out.print("Tipo (Bicicleta/Trotinete): ");
-                String type = scanner.nextLine();
-                System.out.print("Status (Disponível, Alugado, Em manutenção): ");
-                String status = scanner.nextLine();
-                System.out.print("Nível de Bateria (%): ");
-                int batteryLevel = scanner.nextInt();
-                scanner.nextLine();
-                System.out.print("Localização: ");
-                String location = scanner.nextLine();
+        System.out.print("Nome de Utilizador (Primeiro e Último Nome): ");
+        String nomeUtilizador = scanner.nextLine();
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
 
-                Vehicle vehicle = new Vehicle(id, type, status, batteryLevel, location);
-                vehicleController.addVehicle(vehicle);
-            }
-            case 2 -> {
-                System.out.println("Lista de Veículos:");
-                for (Vehicle vehicle : vehicleController.listVehicles()) {
-                    System.out.println(vehicle.getId() + " - " + vehicle.getType() + " - " + vehicle.getStatus());
+        Utilizador utilizador = utilizadorController.autenticarUtilizador(nomeUtilizador, password);
+
+        if (utilizador != null) {
+            System.out.println("Autenticação autorizada.");
+            System.out.println("Bem-vindo, " + utilizador.getPrimeiroNome() + " " + utilizador.getUltimoNome() + "!");
+
+            switch (utilizador.getPermissao()) {
+                case "Administrador" -> {
+                    AdministradorView administradorView = new AdministradorView(utilizadorController);
+                    administradorView.mostrarAdminMenu();
+                }
+                case "Comercial" -> {
+                    ComercialView comercialView = new ComercialView(campanhaPromocionalController);
+                    comercialView.mostrarComercialMenu();
+                }
+                case "GestorFrota" -> {
+                    GestorFrotaView gestorFrotaView = new GestorFrotaView(velocipedeController);
+                    gestorFrotaView.mostrarGestorFrotaMenu();
                 }
             }
-            case 3 -> vehicleController.monitorVehicles();
-            case 4 -> {
-                System.out.print("ID do Veículo: ");
-                String id = scanner.nextLine();
-                System.out.print("Nova Localização: ");
-                String newLocation = scanner.nextLine();
-                vehicleController.distributeVehicles(id, newLocation);
-            }
-            default -> System.out.println("Opção inválida.");
+        } else {
+            System.out.println("Erro: Credenciais inválidas.");
         }
     }
 
-    private void manageCampaigns() {
-        System.out.println("\n--- Gerir Campanhas ---");
-        System.out.println("1. Adicionar Campanha");
-        System.out.println("2. Listar Campanhas");
-        System.out.println("3. Atualizar Campanha");
-        System.out.println("4. Remover Campanha");
-        System.out.print("Escolha uma opção: ");
-        int option = scanner.nextInt();
-        scanner.nextLine();
+    private void consultarVelocipedes() {
+        System.out.println("\n--- Consultar Velocipedes ---");
 
-        switch (option) {
-            case 1 -> {
-                System.out.print("ID: ");
-                String id = scanner.nextLine();
-                System.out.print("Nome: ");
-                String name = scanner.nextLine();
-                System.out.print("Tipo: ");
-                String type = scanner.nextLine();
-                System.out.print("Detalhes: ");
-                String details = scanner.nextLine();
+        List<Velocipede> velocipedes = velocipedeController.listarVelocipedes();
 
-                Campaign campaign = new Campaign(id, name, type, details);
-                campaignController.addCampaign(campaign);
+        if (velocipedes.isEmpty()) {
+            System.out.println("Não há velocípedes registados.");
+        } else {
+            for (Velocipede velocipede : velocipedes) {
+                System.out.println(velocipede.getId() + " - " + velocipede.getTipo() + " - " + velocipede.getEstado());
             }
-            case 2 -> {
-                System.out.println("Lista de Campanhas:");
-                for (Campaign campaign : campaignController.listCampaigns()) {
-                    System.out.println(campaign.getName() + " - " + campaign.getDetails());
-                }
-            }
-            case 3 -> {
-                System.out.print("ID da Campanha: ");
-                String id = scanner.nextLine();
-                System.out.print("Novo Nome: ");
-                String name = scanner.nextLine();
-                System.out.print("Novo Tipo: ");
-                String type = scanner.nextLine();
-                System.out.print("Novos Detalhes: ");
-                String details = scanner.nextLine();
-
-                Campaign updatedCampaign = new Campaign(id, name, type, details);
-                campaignController.updateCampaign(id, updatedCampaign);
-            }
-            case 4 -> {
-                System.out.print("ID da Campanha: ");
-                String id = scanner.nextLine();
-                campaignController.removeCampaign(id);
-            }
-            default -> System.out.println("Opção inválida.");
         }
     }
 }
