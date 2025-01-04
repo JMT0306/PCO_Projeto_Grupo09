@@ -5,12 +5,14 @@ public class Velocipede {
     private String tipo;
     private String estado;
     private int bateria;
-    private String localizacao;
+    private String localizacaoPonto;  // localização definida pelo gestor ou técnico como ponto de entrega/recolha
+    private String localizacao;  // localização atual do velocípede
 
-    public Velocipede(String tipo, String estado, int bateria, String localizacao) {
+    public Velocipede(String tipo, String estado, int bateria, String localizacaoPonto, String localizacao) {
         this.tipo = tipo;
         this.estado = estado;
         this.bateria = bateria;
+        this.localizacaoPonto = localizacaoPonto;
         this.localizacao = localizacao;
     }
 
@@ -44,6 +46,14 @@ public class Velocipede {
 
     public void setBateria(int bateria) {
         this.bateria = bateria;
+    }
+
+    public String getLocalizacaoPonto() {
+        return localizacaoPonto;
+    }
+
+    public void setLocalizacaoPonto(String localizacaoPonto) {
+        this.localizacaoPonto = localizacaoPonto;
     }
 
     public String getLocalizacao() {

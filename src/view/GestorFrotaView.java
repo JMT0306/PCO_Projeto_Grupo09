@@ -1,8 +1,6 @@
 package view;
 import controller.VelocipedeController;
-import model.CampanhaPromocional;
 import model.Velocipede;
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,7 +18,7 @@ public class GestorFrotaView {
             System.out.println("\n--- Menu do Gestor da Frota ---");
             System.out.println("1. Listar Velocípedes");
             System.out.println("2. Adicionar Velocípede");
-            System.out.println("3. Distribuir Velocípede");
+            System.out.println("3. Consultar Localização Velocípedes Ativos");
             System.out.println("4. Remover Velocípede");
             System.out.println("5. Terminar Sessão");
             System.out.print("Escolha uma opção: ");
@@ -30,7 +28,7 @@ public class GestorFrotaView {
             switch (option) {
                 case 1 -> verVelocipedes();
                 case 2 -> adicionarVelocipede();
-                case 3 -> distribuirVelocipedes();
+                case 3 -> consultarLocVelocipedesAtivos();
                 case 4 -> removerVelocipede();
                 case 5 -> {
                     System.out.println("Voltando ao menu principal...");
@@ -57,6 +55,42 @@ public class GestorFrotaView {
         }
     }
 
+    // Método para mostrar os velocípedes ativos, pontos de concentração e os que estão fora dos pontos
+    public void consultarLocVelocipedesAtivos() {
+        System.out.println("\n--- Velocípedes Disponíveis ---");
+
+        List<Velocipede> velocipedesAtivos = velocipedeController.listarVelocipedesAtivos();
+
+        if (velocipedesAtivos.isEmpty()) {
+            System.out.println("Nenhum velocípede ativo disponível.");
+            return;
+        } else {
+            for (Velocipede velocipede : velocipedesAtivos) {
+                System.out.println("ID: " + velocipede.getId() + " - " + "(Tipo: " + velocipede.getTipo() + ") - " +
+                        "(Estado: " + velocipede.getEstado() + ") - "  + "(Bateria: " + velocipede.getBateria() + "%) - "
+                        + "(Localização: " + velocipede.getLocalizacao() + ")");
+            }
+        }
+
+        String concentracaoInfo = velocipedeController.encontrarConcentracao();
+        System.out.println("\n--- Alerta Pontos de Maior e Menor Concentração ---");
+        System.out.println(concentracaoInfo);
+
+        List<Velocipede> foraDosPontos = velocipedeController.encontrarForaDosPontosValidos();
+        if (!foraDosPontos.isEmpty()) {
+            System.out.println("\n--- Velocípedes Fora dos Pontos Válidos ---");
+            for (Velocipede velocipede : foraDosPontos) {
+                System.out.println("ID: " + velocipede.getId() + " - (Localização Atual: " + velocipede.getLocalizacao()
+                        + ")" + " - (Localização Ponto: " + velocipede.getLocalizacaoPonto() + ")");
+            }
+        } else {
+            System.out.println("\n--- Velocípedes Fora dos Pontos Válidos ---");
+            System.out.println("Nenhum velocípede está fora dos pontos válidos.");
+        }
+
+        distribuirVelocipedes();
+    }
+
     private void adicionarVelocipede() {
         System.out.println("\n--- Adicionar Velocípede ---");
 
@@ -69,10 +103,15 @@ public class GestorFrotaView {
         System.out.print("Bateria (entre 0 a 100): ");
         int bateria = Integer.parseInt(scanner.nextLine());
 
-        System.out.print("Localização (coordenadas): ");
-        String localizacao = scanner.nextLine();
+        System.out.print("Latitude (de -90 a 90): ");
+        double latitude = Double.parseDouble(scanner.nextLine());
 
-        boolean success = velocipedeController.adicionarVelocipede(tipo, estado, bateria, localizacao);
+        System.out.print("Longitude (de -180 a 180): ");
+        double longitude = Double.parseDouble(scanner.nextLine());
+
+        String localizacao = latitude + "," + longitude;
+
+        boolean success = velocipedeController.adicionarVelocipede(tipo, estado, bateria, localizacao, localizacao);
 
         if (success) {
             System.out.println("Velocípede registado na frota com sucesso.");
@@ -84,23 +123,16 @@ public class GestorFrotaView {
     private void distribuirVelocipedes() {
         System.out.println("\n--- Distribuir Velocípedes ---");
 
-        List<Velocipede> ativos = velocipedeController.listarVelocipedesAtivos();
-
-        if (ativos.isEmpty()) {
-            System.out.println("Não há velocípedes ativos disponíveis para distribuição.");
-            return;
-        }
-
-        System.out.println("Velocípedes ativos disponíveis:");
-        for (Velocipede v : ativos) {
-            System.out.println("ID: " + v.getId() + ", Localização atual: " + v.getLocalizacao());
-        }
-
         System.out.print("ID do velocípede a distribuir: ");
         int id = Integer.parseInt(scanner.nextLine());
 
-        System.out.print("Nova localização (coordenadas): ");
-        String novaLocalizacao = scanner.nextLine();
+        System.out.print("Nova Latitude (de -90 a 90): ");
+        double latitude = Double.parseDouble(scanner.nextLine());
+
+        System.out.print("Nova Longitude (de -180 a 180): ");
+        double longitude = Double.parseDouble(scanner.nextLine());
+
+        String novaLocalizacao = latitude + "," + longitude;
 
         boolean sucesso = velocipedeController.atualizarLocalizacaoVelocipede(id, novaLocalizacao);
 
