@@ -63,4 +63,8 @@ public class Velocipede {
     public void setLocalizacao(String localizacao) {
         this.localizacao = localizacao;
     }
+
+    public void carregarBateria() {
+        this.bateria = 100;
+    }
 }

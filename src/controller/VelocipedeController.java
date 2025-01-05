@@ -142,4 +142,33 @@ public class VelocipedeController {
     public List<Velocipede> listarVelocipedes() {
         return frota;
     }
+
+    // Método para carregar os utilizadores na aplicação (classe Config)
+    public void carregarVelocipedes(List<Velocipede> velocipedes) {
+        for (Velocipede velocipede : velocipedes) {
+            velocipede.setId(velocipedeIdCounter++);
+            this.frota.add(velocipede);
+        }
+    }
+
+    // Método para carregar a bateria de um velocípede específico
+    public boolean carregarBateria(int id) {
+        for (Velocipede velocipede : frota) {
+            if (velocipede.getId() == id) {
+                velocipede.carregarBateria();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Marca o velocípede como alugado
+    public void alterarEstadoAlugado(int id) {
+        for (Velocipede velocipede : frota) {
+            if (velocipede.getId() == id) {
+                velocipede.setEstado("Alugado");
+                return;
+            }
+        }
+    }
 }

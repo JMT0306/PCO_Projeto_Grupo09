@@ -1,7 +1,5 @@
 package view;
-import controller.CampanhaPromocionalController;
-import controller.UtilizadorController;
-import controller.VelocipedeController;
+import controller.*;
 import model.Utilizador;
 import model.Velocipede;
 import java.util.List;
@@ -11,13 +9,20 @@ public class MainView {
     private final UtilizadorController utilizadorController;
     private final VelocipedeController velocipedeController;
     private final CampanhaPromocionalController campanhaPromocionalController;
+    private final PagamentoController pagamentoController;
+    private final AluguerController aluguerController;
+    private final PercursoController percursoController;
     private final Scanner scanner;
 
     public MainView(UtilizadorController utilizadorController, VelocipedeController velocipedeController,
-                    CampanhaPromocionalController campanhaPromocionalController) {
+                    CampanhaPromocionalController campanhaPromocionalController, PagamentoController pagamentoController,
+                    AluguerController aluguerController, PercursoController percursoController) {
         this.utilizadorController = utilizadorController;
         this.velocipedeController = velocipedeController;
         this.campanhaPromocionalController = campanhaPromocionalController;
+        this.pagamentoController = pagamentoController;
+        this.aluguerController = aluguerController;
+        this.percursoController = percursoController;
         this.scanner = new Scanner(System.in);
     }
 
@@ -54,7 +59,7 @@ public class MainView {
         String email = scanner.nextLine();
         System.out.print("Password: ");
         String password = scanner.nextLine();
-        String permissao = "GestorFrota";
+        String permissao = "Cliente";
 
         System.out.println("Um link de confirmação foi enviado para o seu email: " + email);
 
@@ -78,8 +83,13 @@ public class MainView {
         Utilizador utilizador = utilizadorController.autenticarUtilizador(nomeUtilizador, password);
 
         if (utilizador != null) {
-            System.out.println("Autenticação autorizada.");
-            System.out.println("Bem-vindo, " + utilizador.getPrimeiroNome() + " " + utilizador.getUltimoNome() + "!");
+            if (utilizador.getPermissao() == null) {
+                System.out.println("A sua conta não tem qualquer permissão. Contacte um Administrador.");
+                mostrarMenu();
+            } else {
+                System.out.println("Autenticação autorizada.");
+                System.out.println("Bem-vindo, " + utilizador.getPrimeiroNome() + " " + utilizador.getUltimoNome() + "!");
+            }
 
             switch (utilizador.getPermissao()) {
                 case "Administrador" -> {
@@ -94,10 +104,16 @@ public class MainView {
                     GestorFrotaView gestorFrotaView = new GestorFrotaView(velocipedeController);
                     gestorFrotaView.mostrarGestorFrotaMenu();
                 }
+                case "TécnicoManutenção" -> {
+                    TecnicoManutencaoView tecnicoManutencaoView = new TecnicoManutencaoView(velocipedeController);
+                    tecnicoManutencaoView.mostrarTecnicoManutencaoMenu();
+                }
                 case "Cliente" -> {
-                    ClienteView clienteView = new ClienteView(velocipedeController);
+                    ClienteView clienteView = new ClienteView(velocipedeController, pagamentoController, utilizador.getId(),
+                            aluguerController, percursoController);
                     clienteView.mostrarClienteMenu();
                 }
+
                 default -> System.out.println("Erro: Permissão desconhecida.");
             }
         } else {
@@ -108,13 +124,14 @@ public class MainView {
     private void consultarVelocipedes() {
         System.out.println("\n--- Consultar Velocípedes ---");
 
-        List<Velocipede> velocipedes = velocipedeController.listarVelocipedes();
+        List<Velocipede> velocipedes = velocipedeController.listarVelocipedesAtivos();
 
         if (velocipedes.isEmpty()) {
             System.out.println("Não há velocípedes registados.");
         } else {
             for (Velocipede velocipede : velocipedes) {
-                System.out.println(velocipede.getId() + " - " + velocipede.getTipo() + " - " + velocipede.getEstado());
+                System.out.println(("(Tipo: " + velocipede.getTipo() + ") - (Localização: " + velocipede.getLocalizacao()
+                        + ")" + " - (Estado: " + velocipede.getEstado() + ")"));
             }
         }
     }

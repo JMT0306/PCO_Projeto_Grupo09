@@ -81,7 +81,7 @@ public class GestorFrotaView {
             System.out.println("\n--- Velocípedes Fora dos Pontos Válidos ---");
             for (Velocipede velocipede : foraDosPontos) {
                 System.out.println("ID: " + velocipede.getId() + " - (Localização Atual: " + velocipede.getLocalizacao()
-                        + ")" + " - (Localização Ponto: " + velocipede.getLocalizacaoPonto() + ")");
+                        + ")" + " - (Localização Ponto Válido: " + velocipede.getLocalizacaoPonto() + ")");
             }
         } else {
             System.out.println("\n--- Velocípedes Fora dos Pontos Válidos ---");

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UtilizadorController {
-    private static int utilizadorIdCounter = 1;
     private final List<Utilizador> utilizadores;
+    private static int utilizadorIdCounter = 1;
 
     public UtilizadorController() {
         this.utilizadores = new ArrayList<>();
@@ -70,5 +70,13 @@ public class UtilizadorController {
     // Método para listar todos os utilizadores
     public List<Utilizador> listarUtilizadores() {
         return utilizadores;
+    }
+
+    // Método para carregar os utilizadores na aplicação (classe Config)
+    public void carregarUtilizadores(List<Utilizador> utilizadores) {
+        for (Utilizador utilizador : utilizadores) {
+            utilizador.setId(utilizadorIdCounter++);
+            this.utilizadores.add(utilizador);
+        }
     }
 }

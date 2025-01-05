@@ -42,7 +42,7 @@ public class AdministradorView {
         for (Utilizador utilizador : utilizadorController.listarUtilizadores()) {
             System.out.println("ID: " + utilizador.getId() + " - " + "(Nome: " + utilizador.getPrimeiroNome() + ") - " +
                     "(Email: " + utilizador.getEmail() + ") - " + "(Permissão: " + (utilizador.getPermissao() == null ?
-                    "Sem permissão" : utilizador.getPermissao()) + ")");
+                    "Sem Permissão" : utilizador.getPermissao()) + ")");
         }
     }
 
