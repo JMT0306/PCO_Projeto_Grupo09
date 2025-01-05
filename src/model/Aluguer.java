@@ -5,6 +5,8 @@ public class Aluguer {
     private int velocipedeId;
     private int idCliente;
 
+    private boolean isAtivo = true;
+
     public Aluguer(int id, int velocipedeId, int utilizadorId) {
         this.id = id;
         this.velocipedeId = velocipedeId;
@@ -33,5 +35,13 @@ public class Aluguer {
 
     public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
+    }
+
+    public boolean isAtivo() {
+        return isAtivo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        isAtivo = ativo;
     }
 }

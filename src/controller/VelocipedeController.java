@@ -171,4 +171,24 @@ public class VelocipedeController {
             }
         }
     }
+
+    // Marca o velocípede como disponível
+    public void alterarEstadoDisponivel(int id) {
+        for (Velocipede velocipede : frota) {
+            if (velocipede.getId() == id) {
+                velocipede.setEstado("Disponível");
+                return;
+            }
+        }
+    }
+
+    // Método para obter a localização atual de um velocípede pelo ID
+    public String obterLocalizacaoAtual(int velocipedeId) {
+        for (Velocipede velocipede : frota) {
+            if (velocipede.getId() == velocipedeId) {
+                return velocipede.getLocalizacao();
+            }
+        }
+        return null;
+    }
 }

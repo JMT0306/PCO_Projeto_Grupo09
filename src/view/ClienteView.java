@@ -3,10 +3,10 @@ import controller.AluguerController;
 import controller.PagamentoController;
 import controller.PercursoController;
 import controller.VelocipedeController;
-import model.Percurso;
 import model.Velocipede;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ClienteView {
     private final VelocipedeController velocipedeController;
@@ -41,7 +41,7 @@ public class ClienteView {
             switch (option) {
                 case 1 -> alugarVelocipede();
                 case 2 -> efetuarPercurso();
-                //case 3 -> devolverVelocipede();
+                case 3 -> devolverVelocipede();
                 case 4 -> {
                     System.out.println("Voltando ao menu principal...");
                     return;
@@ -55,9 +55,13 @@ public class ClienteView {
         System.out.println("Cliente autenticado: " + clienteId);
         System.out.println("\n--- Alugar Velocípede ---");
         List<Velocipede> velocipedesAtivos = velocipedeController.listarVelocipedesAtivos();
+        boolean temAluguerAtivo = aluguerController.verificarAluguerAtivo(clienteId);
 
         if (velocipedesAtivos.isEmpty()) {
             System.out.println("Não há velocípedes disponíveis para aluguer.");
+            return;
+        } else if (temAluguerAtivo) {
+            System.out.println("Já tem um velocípede alugado. Não pode alugar outro até devolver o atual.");
             return;
         }
 
@@ -114,9 +118,32 @@ public class ClienteView {
             return;
         }
 
-        List<Percurso> percursos = percursoController.listarPercursos();
+        int velocipedeId = aluguerController.obterVelocipedeId(clienteId);
+        String localizacaoAtual = velocipedeController.obterLocalizacaoAtual(velocipedeId);
+
         System.out.println("Iniciando o percurso com o velocípede alugado...");
-        percursoController.iniciarPercurso();
-        System.out.println(percursos);
+        percursoController.iniciarPercurso(localizacaoAtual);
+    }
+
+    private void devolverVelocipede() {
+        System.out.println("\n--- Devolver Velocípede ---");
+
+        boolean temAluguerAtivo = aluguerController.verificarAluguerAtivo(clienteId);
+        if (!temAluguerAtivo) {
+            System.out.println("Não tem nenhum velocípede alugado para devolver.");
+            return;
+        }
+
+        int velocipedeId = aluguerController.obterVelocipedeId(clienteId);
+        System.out.println("Deseja devolver o velocípede (ID: " + velocipedeId + ") alugado? (s/n) ");
+        String resposta = scanner.nextLine();
+
+        if ("s".equalsIgnoreCase(resposta)) {
+            System.out.println("Velocípede devolvido com sucesso.");
+            aluguerController.desativarAluguer(clienteId);
+            velocipedeController.alterarEstadoDisponivel(velocipedeId);
+        } else {
+            System.out.println("Devolução cancelada.");
+        }
     }
 }

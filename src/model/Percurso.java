@@ -6,9 +6,10 @@ public class Percurso {
     private boolean ativo;
     private List<String> coordenadas;
 
-    public Percurso() {
+    public Percurso(String localizacaoAtual) {
         this.ativo = false;
         this.coordenadas = new ArrayList<>();
+        this.coordenadas.add(localizacaoAtual);
     }
 
     public boolean isAtivo() {
