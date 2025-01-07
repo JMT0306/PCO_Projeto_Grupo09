@@ -4,7 +4,6 @@ public class Aluguer {
     private int id;
     private int velocipedeId;
     private int idCliente;
-
     private boolean isAtivo = true;
 
     public Aluguer(int id, int velocipedeId, int utilizadorId) {

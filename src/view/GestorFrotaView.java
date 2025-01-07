@@ -23,7 +23,7 @@ public class GestorFrotaView {
             System.out.println("5. Terminar Sessão");
             System.out.print("Escolha uma opção: ");
             option = scanner.nextInt();
-            scanner.nextLine(); // limpar o buffer
+            scanner.nextLine();
 
             switch (option) {
                 case 1 -> verVelocipedes();
@@ -55,7 +55,6 @@ public class GestorFrotaView {
         }
     }
 
-    // Método para mostrar os velocípedes ativos, pontos de concentração e os que estão fora dos pontos
     public void consultarLocVelocipedesAtivos() {
         System.out.println("\n--- Velocípedes Disponíveis ---");
 

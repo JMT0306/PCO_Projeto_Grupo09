@@ -23,7 +23,7 @@ public class ComercialView {
             System.out.println("5. Terminar Sessão");
             System.out.print("Escolha uma opção: ");
             option = scanner.nextInt();
-            scanner.nextLine(); // limpar o buffer
+            scanner.nextLine();
 
             switch (option) {
                 case 1 -> verCampanhas();
@@ -123,7 +123,7 @@ public class ComercialView {
             if (success) {
                 System.out.println("Campanha removida com sucesso");
             } else {
-                System.out.println("Falha na remoção da campanha. Campanha não encontrada.");
+                System.out.println("Falha ao remover a campanha. Campanha não encontrada.");
             }
         } else {
             System.out.println("Eliminação da campanha cancelada.");

@@ -11,7 +11,12 @@ public class PercursoController {
         this.percursos = new ArrayList<>();
     }
 
-    // Método para iniciar o percurso
+    /**
+     * Inicia um novo percurso a partir da localização dada, atualizando as suas coordenadas de forma automática.
+     * As coordenadas são atualizadas a cada 2 segundos, aumentando um pouco a latitude e a longitude.
+     * Quando o cliente parar o percurso, escrevendo "p", o percurso para e todas as coordenadas registadas são mostradas ao mesmo.
+     * @param localizacaoAtual localização inicial do percurso, no formato "latitude,longitude".
+     */
     public void iniciarPercurso(String localizacaoAtual) {
         Percurso percurso = new Percurso(localizacaoAtual);
         percurso.setAtivo(true);
@@ -45,20 +50,7 @@ public class PercursoController {
             }
         }
 
-        System.out.println("Todas as coordenadas do percurso:");
+        System.out.println("\nTodas as coordenadas do percurso:");
         percurso.getCoordenadas().forEach(System.out::println);
     }
-
-    // Método para adicionar coordenada ao percurso
-    public void adicionarCoordenada(Percurso percurso, double latitude, double longitude) {
-        String coordenada = latitude + "," + longitude;
-        percurso.getCoordenadas().add(coordenada);
-    }
-
-    // Método para listar todos os percursos
-    public List<Percurso> listarPercursos() {
-        return percursos;
-    }
 }
-
-

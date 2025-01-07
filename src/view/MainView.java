@@ -36,7 +36,7 @@ public class MainView {
             System.out.println("4. Sair");
             System.out.print("Escolha uma opção: ");
             option = scanner.nextInt();
-            scanner.nextLine(); // limpar o buffer
+            scanner.nextLine();
 
             switch (option) {
                 case 1 -> iniciarRegisto();

@@ -10,8 +10,8 @@ public class Pagamento {
     private String status;
     private String metodoPagamento;
 
-    public Pagamento(int id, String nomeTitular, String numeroCartao, String validade,
-                     String cvv, double valor, String status, String metodoPagamento) {
+    public Pagamento(int id, String nomeTitular, String numeroCartao, String validade, String cvv, double valor,
+                     String status, String metodoPagamento) {
         this.id = id;
         this.nomeTitular = nomeTitular;
         this.numeroCartao = numeroCartao;
@@ -62,7 +62,9 @@ public class Pagamento {
         this.cvv = cvv;
     }
 
-    public double getValor() {return valor;}
+    public double getValor() {
+        return valor;
+    }
 
     public void setValor(double valor) {
         this.valor = valor;

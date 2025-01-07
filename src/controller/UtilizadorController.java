@@ -11,7 +11,15 @@ public class UtilizadorController {
         this.utilizadores = new ArrayList<>();
     }
 
-    // Método para registar um novo utilizador
+    /**
+     * Regista um novo utilizador no sistema.
+     * @param primeiroNome primeiro nome do utilizador.
+     * @param ultimoNome último nome do utilizador.
+     * @param email endereço de email do utilizador.
+     * @param password palavra-passe do utilizador.
+     * @param permissao o nível de permissão do utilizador (Cliente, Administrador, etc).
+     * @return true se o utilizador foi registado com sucesso, false se o email ou o nome completo já existir.
+     */
     public boolean registarUtilizador(String primeiroNome, String ultimoNome, String email, String password, String permissao) {
         Utilizador utilizador = new Utilizador(primeiroNome, ultimoNome, email, password, permissao);
         utilizador.setId(utilizadorIdCounter++);
@@ -30,7 +38,13 @@ public class UtilizadorController {
         return true;
     }
 
-    // Método para autenticar um utilizador
+    /**
+     * Faz a autenticação de um utilizador com base no nome completo e na palavra-passe fornecida.
+     * É verificado se o nome completo e a palavra-passe fornecida correspondem a um utilizador existente.
+     * @param nomeUtilizador nome completo do utilizador (primeiro nome e último nome).
+     * @param password palavra-passe do utilizador.
+     * @return o utilizador autenticado se o nome e a password forem válidos, ou null caso contrário.
+     */
     public Utilizador autenticarUtilizador(String nomeUtilizador, String password) {
         for (Utilizador utilizador : utilizadores) {
             String nomeCompleto = utilizador.getPrimeiroNome() + " " + utilizador.getUltimoNome();
@@ -42,7 +56,12 @@ public class UtilizadorController {
         return null;
     }
 
-    // Método para atribuir uma permissão a um utilizador
+    /**
+     * Atribui uma permissão a um utilizador específico, caso seja uma permissão válida.
+     * @param id o id do utilizador a atribuir a permissão.
+     * @param permissao o nome do tipo de permissão a atribuir ao utilizador.
+     * @return true se a permissão foi atribuída com sucesso, false caso contrário.
+     */
     public boolean atribuirPermissao(int id, String permissao) {
         if (!permissao.equals("GestorFrota") && !permissao.equals("TécnicoManutenção") && !permissao.equals("Comercial")) {
             return false;
@@ -56,7 +75,12 @@ public class UtilizadorController {
         return false;
     }
 
-    // Método para revogar uma permissão de um utilizador
+    /**
+     * Revoga a permissão de um utilizador específico.
+     * É procurado o utilizador com o ID fornecido e, se o utilizador for encontrado, a sua permissão é removida (fica null).
+     * @param id ID do utilizador a revogar a permissão.
+     * @return true se a permissão foi revogada com sucesso, false caso contrário.
+     */
     public boolean revogarPermissao(int id) {
         for (Utilizador utilizador : utilizadores) {
             if (utilizador.getId() == id) {
@@ -67,12 +91,18 @@ public class UtilizadorController {
         return false;
     }
 
-    // Método para listar todos os utilizadores
+    /**
+     * Lista todos os utilizadores registados no sistema.
+     * @return lista com todos os utilizadores.
+     */
     public List<Utilizador> listarUtilizadores() {
         return utilizadores;
     }
 
-    // Método para carregar os utilizadores na aplicação (classe Config)
+    /**
+     * Carrega uma lista de utilizadores no sistema, atribuindo um ID único a cada um.
+     * @param utilizadores lista de utilizadores a serem carregados no sistema.
+     */
     public void carregarUtilizadores(List<Utilizador> utilizadores) {
         for (Utilizador utilizador : utilizadores) {
             utilizador.setId(utilizadorIdCounter++);

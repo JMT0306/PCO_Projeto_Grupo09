@@ -20,7 +20,7 @@ public class TecnicoManutencaoView {
             System.out.println("2. Terminar sessão");
             System.out.print("Escolha uma opção: ");
             option = scanner.nextInt();
-            scanner.nextLine(); // limpar o buffer
+            scanner.nextLine();
 
             switch (option) {
                 case 1 -> verListaVelocipedesDisponiveis();

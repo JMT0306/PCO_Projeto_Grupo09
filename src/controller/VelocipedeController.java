@@ -11,7 +11,15 @@ public class VelocipedeController {
         this.frota = new ArrayList<>();
     }
 
-    // Método para adicionar um novo velocípede à frota
+    /**
+     * Adiciona um novo velocípede à frota, verificando também a validade dos dados fornecidos.
+     * @param tipo é o tipo de velocípede ("Bicicleta" ou "Trotinete").
+     * @param estado é o estado do velocípede ("Disponível", "Alugado" ou "Manutenção").
+     * @param bateria é o nível da bateria (entre 0 e 100%).
+     * @param localizacaoPonto é a localização (coordenadas) definida pelo gestor ou técnico como um ponto de entrega/recolha.
+     * @param localizacao é a localização (coordenadas) atual do velocípede.
+     * @return true se o velocípede foi adicionado com sucesso, false caso contrário.
+     */
     public boolean adicionarVelocipede(String tipo, String estado, int bateria, String localizacaoPonto, String localizacao) {
         if (!(tipo.equalsIgnoreCase("Bicicleta") || tipo.equalsIgnoreCase("Trotinete"))) {
             return false;
@@ -41,7 +49,13 @@ public class VelocipedeController {
         return true;
     }
 
-    // Método para atualizar a localização de um velocípede
+    /**
+     * Atualiza a localização de um velocípede na frota.
+     * Procura o velocípede com o ID fornecido e, se este estiver disponível, atualiza a sua localização.
+     * @param id ID do velocípede a atualizar a localização.
+     * @param novaLocalizacao a nova localização do velocípede.
+     * @return true se a localização foi atualizada com sucesso, false caso contrário.
+     */
     public boolean atualizarLocalizacaoVelocipede(int id, String novaLocalizacao) {
         for (Velocipede velocipede : frota) {
             if (velocipede.getId() == id && velocipede.getEstado().equalsIgnoreCase("Disponível")) {
@@ -53,7 +67,11 @@ public class VelocipedeController {
         return false;
     }
 
-    // Método para remover um velocípede existente da frota
+    /**
+     * Remove um velocípede da frota, se estiver disponível.
+     * @param id o ID do velocípede a remover.
+     * @return uma mensagem indicando sucesso ou a razão pela qual a remoção não foi possível.
+     */
     public String removerVelocipede(int id) {
         for (int i = 0; i < frota.size(); i++) {
             Velocipede velocipede = frota.get(i);
@@ -69,7 +87,10 @@ public class VelocipedeController {
         return "Velocípede não encontrado.";
     }
 
-    // Método para listar os velocípedes ativos
+    /**
+     * Lista os velocípedes que estão disponíveis na frota.
+     * @return lista de velocípedes disponíveis.
+     */
     public List<Velocipede> listarVelocipedesAtivos() {
         List<Velocipede> velocipedesAtivos = new ArrayList<>();
         for (Velocipede velocipede : frota) {
@@ -80,7 +101,11 @@ public class VelocipedeController {
         return velocipedesAtivos;
     }
 
-    // Método para encontrar os pontos de maior e menor concentração
+    /**
+     * Encontra as localizações com maior e menor concentração de velocípedes ativos na frota.
+     * Verifica todas as localizações dos velocípedes disponíveis e calcula a quantidade de velocípedes em cada local.
+     * @return string com a maior e menor concentração de velocípedes e o número de velocípedes em cada local.
+     */
     public String encontrarConcentracao() {
         List<Velocipede> velocipedesAtivos = listarVelocipedesAtivos();
         String maiorLocal = "", menorLocal = "";
@@ -104,7 +129,11 @@ public class VelocipedeController {
                 "Menor concentração: " + menorLocal + " (" + menorQtd + " velocípedes)";
     }
 
-    // Método para contar o número de velocípedes na mesma localização
+    /**
+     * Conta o número de velocípedes disponíveis em uma determinada localização.
+     * @param localizacao é a localização para contar os velocípedes disponíveis.
+     * @return o número de velocípedes disponíveis na localização especificada.
+     */
     private int contarVelocipedesPorLocalizacao(String localizacao) {
         int contador = 0;
 
@@ -117,7 +146,12 @@ public class VelocipedeController {
         return contador;
     }
 
-    // Método que verifica se o velocípede está fora do ponto válido
+    /**
+     * Verifica se o velocípede está fora do ponto válido de localização.
+     * Compara a localização atual do velocípede com o ponto de localização inicial.
+     * @param velocipede o velocípede a verificar.
+     * @return true se o velocípede estiver fora do ponto válido, false caso contrário.
+     */
     private boolean isForaDoPontoValido(Velocipede velocipede) {
         String localizacao = velocipede.getLocalizacao();
         String localizacaoPonto = velocipede.getLocalizacaoPonto();
@@ -125,7 +159,11 @@ public class VelocipedeController {
         return !localizacao.equals(localizacaoPonto);
     }
 
-    // Método para encontrar e retornar os velocípedes ativos que estão fora dos pontos válidos de localização
+    /**
+     * Encontra e retorna os velocípedes ativos que estão fora dos pontos válidos de localização.
+     * Percorre todos os velocípedes ativos e verifica se a sua localização atual está fora do ponto de localização inicial.
+     * @return lista de velocípedes que estão fora do ponto válido de localização.
+     */
     public List<Velocipede> encontrarForaDosPontosValidos() {
         List<Velocipede> foraDosPontos = new ArrayList<>();
 
@@ -138,20 +176,19 @@ public class VelocipedeController {
         return foraDosPontos;
     }
 
-    // Método para listar todos os velocípedes na frota
+    /**
+     * Lista todos os velocípedes presentes na frota.
+     * @return lista de todos os velocípedes na frota.
+     */
     public List<Velocipede> listarVelocipedes() {
         return frota;
     }
 
-    // Método para carregar os utilizadores na aplicação (classe Config)
-    public void carregarVelocipedes(List<Velocipede> velocipedes) {
-        for (Velocipede velocipede : velocipedes) {
-            velocipede.setId(velocipedeIdCounter++);
-            this.frota.add(velocipede);
-        }
-    }
-
-    // Método para carregar a bateria de um velocípede específico
+    /**
+     * Carrega a bateria de um velocípede específico.
+     * @param id o ID do velocípede a ser carregado.
+     * @return true se a bateria foi carregada com sucesso, false se o velocípede não foi encontrado.
+     */
     public boolean carregarBateria(int id) {
         for (Velocipede velocipede : frota) {
             if (velocipede.getId() == id) {
@@ -162,7 +199,10 @@ public class VelocipedeController {
         return false;
     }
 
-    // Marca o velocípede como alugado
+    /**
+     * Marca o velocípede como "Alugado".
+     * @param id o ID do velocípede a ser marcado como alugado.
+     */
     public void alterarEstadoAlugado(int id) {
         for (Velocipede velocipede : frota) {
             if (velocipede.getId() == id) {
@@ -172,7 +212,10 @@ public class VelocipedeController {
         }
     }
 
-    // Marca o velocípede como disponível
+    /**
+     * Marca o velocípede como "Disponível".
+     * @param id o ID do velocípede a ser marcado como disponível.
+     */
     public void alterarEstadoDisponivel(int id) {
         for (Velocipede velocipede : frota) {
             if (velocipede.getId() == id) {
@@ -182,7 +225,11 @@ public class VelocipedeController {
         }
     }
 
-    // Método para obter a localização atual de um velocípede pelo ID
+    /**
+     * Obtém a localização atual de um velocípede pelo seu ID.
+     * @param velocipedeId ID do velocípede cuja localização atual se deseja obter.
+     * @return a localização atual do velocípede, ou null se o velocípede não for encontrado.
+     */
     public String obterLocalizacaoAtual(int velocipedeId) {
         for (Velocipede velocipede : frota) {
             if (velocipede.getId() == velocipedeId) {
@@ -190,5 +237,16 @@ public class VelocipedeController {
             }
         }
         return null;
+    }
+
+    /**
+     * Carrega uma lista de velocípedes no sistema, atribuindo um ID único a cada um.
+     * @param velocipedes lista de velocípedes a serem carregados no sistema.
+     */
+    public void carregarVelocipedes(List<Velocipede> velocipedes) {
+        for (Velocipede velocipede : velocipedes) {
+            velocipede.setId(velocipedeIdCounter++);
+            this.frota.add(velocipede);
+        }
     }
 }

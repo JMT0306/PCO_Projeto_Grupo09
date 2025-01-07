@@ -6,7 +6,6 @@ import controller.VelocipedeController;
 import model.Velocipede;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class ClienteView {
     private final VelocipedeController velocipedeController;
@@ -36,7 +35,7 @@ public class ClienteView {
             System.out.println("4. Terminar Sessão");
             System.out.print("Escolha uma opção: ");
             option = scanner.nextInt();
-            scanner.nextLine(); // limpar o buffer
+            scanner.nextLine();
 
             switch (option) {
                 case 1 -> alugarVelocipede();
@@ -52,13 +51,12 @@ public class ClienteView {
     }
 
     private void alugarVelocipede() {
-        System.out.println("Cliente autenticado: " + clienteId);
         System.out.println("\n--- Alugar Velocípede ---");
         List<Velocipede> velocipedesAtivos = velocipedeController.listarVelocipedesAtivos();
         boolean temAluguerAtivo = aluguerController.verificarAluguerAtivo(clienteId);
 
         if (velocipedesAtivos.isEmpty()) {
-            System.out.println("Não há velocípedes disponíveis para aluguer.");
+            System.out.println("Não há velocípedes disponíveis para alugar.");
             return;
         } else if (temAluguerAtivo) {
             System.out.println("Já tem um velocípede alugado. Não pode alugar outro até devolver o atual.");
@@ -66,8 +64,8 @@ public class ClienteView {
         }
 
         for (Velocipede velocipede : velocipedesAtivos) {
-            System.out.println("(ID: " + velocipede.getId() + ") - (Tipo: " + velocipede.getTipo() +
-                    ") - (Bateria: " + velocipede.getBateria() + "%) - (Localização: " + velocipede.getLocalizacao() + ")");
+            System.out.println("(ID: " + velocipede.getId() + ") - (Tipo: " + velocipede.getTipo() + ") - (Bateria: " +
+                    velocipede.getBateria() + "%) - (Localização: " + velocipede.getLocalizacao() + ")");
         }
 
         System.out.print("\nEscolha o ID do velocípede que deseja alugar: ");
@@ -77,7 +75,7 @@ public class ClienteView {
         String confirmacao = scanner.nextLine();
 
         if (!confirmacao.equalsIgnoreCase("s")) {
-            System.out.println("Aluguel cancelado.");
+            System.out.println("Aluguer cancelado.");
             return;
         }
 
@@ -97,7 +95,7 @@ public class ClienteView {
 
         boolean pagamentoValido = pagamentoController.processarPagamento(nomeTitular, numeroCartao, validade, cvv);
         if (!pagamentoValido) {
-            System.out.println("Erro no processamento do pagamento.");
+            System.out.println("Erro ao processar o pagamento.");
         } else {
             System.out.println("Pagamento autorizado.");
 

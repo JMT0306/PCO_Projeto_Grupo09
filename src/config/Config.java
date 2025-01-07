@@ -7,11 +7,11 @@ public class Config {
 
     public static List<Utilizador> defaultUtilizadores() {
         return List.of(
-                new Utilizador("a", "a", "andre@email.com", "a", "Administrador"),
-                new Utilizador("b", "b", "joao@email.com", "b", "Comercial"),
-                new Utilizador("c", "c", "maria@email.com", "c", "GestorFrota"),
-                new Utilizador("d", "d", "joana@email.com", "d", "TécnicoManutenção"),
-                new Utilizador("e", "e", "rodrigo@email.com", "e", "Cliente")
+                new Utilizador("Admin", "Admin", "admin@email.pt", "123", "Administrador"),
+                new Utilizador("Comercial", "Comercial", "comercial@email.pt", "123", "Comercial"),
+                new Utilizador("Gestor", "Frota", "gestorfrota@email.pt", "123", "GestorFrota"),
+                new Utilizador("Técnico", "Manutenção", "tecnicomanutencao@email.com", "123", "TécnicoManutenção"),
+                new Utilizador("Cliente", "Cliente", "cliente@email.com", "123", "Cliente")
         );
     }
 

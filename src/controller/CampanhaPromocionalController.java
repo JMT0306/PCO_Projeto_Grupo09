@@ -5,15 +5,21 @@ import java.util.List;
 
 public class CampanhaPromocionalController {
     private static int campaignIdCounter = 1;
-    private final List<CampanhaPromocional> campanhaPromocionals;
+    private final List<CampanhaPromocional> campanhaPromocional;
 
     public CampanhaPromocionalController() {
-        this.campanhaPromocionals = new ArrayList<>();
+        this.campanhaPromocional = new ArrayList<>();
     }
 
-    // Método para adicionar uma nova campanha
+    /**
+     * Adiciona uma nova campanha promocional, se não houver uma campanha com o mesmo nome.
+     * @param nome o nome da campanha promocional.
+     * @param tipo o tipo da campanha promocional.
+     * @param detalhes os detalhes da campanha promocional.
+     * @return true se a campanha for adicionada com sucesso, false se já houver uma campanha com o mesmo nome.
+     */
     public boolean adicionarCampanha(String nome, String tipo, String detalhes) {
-        for (CampanhaPromocional campanha : campanhaPromocionals) {
+        for (CampanhaPromocional campanha : campanhaPromocional) {
             if (campanha.getNome().equalsIgnoreCase(nome)) {
                 return false;
             }
@@ -21,13 +27,20 @@ public class CampanhaPromocionalController {
 
         CampanhaPromocional campanha = new CampanhaPromocional(nome, tipo, detalhes);
         campanha.setId(campaignIdCounter++);
-        campanhaPromocionals.add(campanha);
+        campanhaPromocional.add(campanha);
         return true;
     }
 
-    // Método para atualizar uma campanha existente
+    /**
+     * Atualiza os dados de uma campanha promocional existente.
+     * @param id é o identificador da campanha a ser atualizada.
+     * @param nome é o novo nome da campanha a atualizar.
+     * @param tipo é o novo tipo da camapanha a atualizar.
+     * @param detalhes é os novos detalhes da campanha a atualizar.
+     * @return true se atualizar a campanha com sucesso, falso se o id da campanha fornecido não foi encontrado.
+     */
     public boolean atualizarCampanha(int id, String nome, String tipo, String detalhes) {
-        for (CampanhaPromocional campanhaPromocional : campanhaPromocionals) {
+        for (CampanhaPromocional campanhaPromocional : campanhaPromocional) {
             if (campanhaPromocional.getId() == id) {
                 campanhaPromocional.setNome(nome);
                 campanhaPromocional.setTipo(tipo);
@@ -38,19 +51,26 @@ public class CampanhaPromocionalController {
         return false;
     }
 
-    // Método para remover uma campanha
+    /**
+     * Remove uma campanha promocional existente com base num ID fornecido.
+     * @param id é o id da camapanha a ser removida.
+     * @return true se removeu a campanha com sucesso, false se nenhuma campanha com o id fornecido foi encontrada.
+     */
     public boolean removerCampanha(int id) {
-        for (int i = 0; i < campanhaPromocionals.size(); i++) {
-            if (campanhaPromocionals.get(i).getId() == id) {
-                campanhaPromocionals.remove(i);
+        for (int i = 0; i < campanhaPromocional.size(); i++) {
+            if (campanhaPromocional.get(i).getId() == id) {
+                campanhaPromocional.remove(i);
                 return true;
             }
         }
         return false;
     }
 
-    // Método para listar todas as campanhas
+    /**
+     * Retorna a lista de todas as campanhas promocionais registadas.
+     * @return lista com todas as campanhas promocionais.
+     */
     public List<CampanhaPromocional> listarCampanhas() {
-        return campanhaPromocionals;
+        return campanhaPromocional;
     }
 }

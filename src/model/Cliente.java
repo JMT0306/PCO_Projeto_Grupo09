@@ -1,20 +1,18 @@
 package model;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Cliente extends Utilizador {
-    private final List<Aluguer> alugueres;
+    private int pontos;
 
     public Cliente(String primeiroNome, String ultimoNome, String email, String password, String permissao) {
         super(primeiroNome, ultimoNome, email, password, permissao);
-        this.alugueres = new ArrayList<>();
+        this.pontos = 0;
     }
 
-    public void adicionarAluguer(Aluguer aluguer) {
-        alugueres.add(aluguer);
+    public int getPontos() {
+        return pontos;
     }
 
-    public List<Aluguer> getAlugueres() {
-        return alugueres;
+    public void setPontos(int pontos) {
+        this.pontos = pontos;
     }
 }
